@@ -27,17 +27,17 @@ class TodoList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {itemList: []};
+    this.state = {itemList: this.props.itemList};
   }
 
-  addTodoItem(value) {
-    this.state.itemList.push(<ListItem task={value} />);
+  addTodoItem = (todo) => {
+    this.state.itemList.push(todo);
   }
 
   render() {
     return (
       <div>
-        {this.state.itemList.map( listItem => <div>{listItem}</div> )}
+        {this.state.itemList.map( listItem => <ListItem task={listItem.task} /> )}
       </div>
     );
   }
@@ -57,8 +57,10 @@ class AddTodo extends Component {
     this.setState({value: event.target.value});
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
     this.props.handleSubmit(this.state.value);
+    this.setState({value: ''});
   }
 
   render() {
@@ -76,21 +78,26 @@ class AddTodo extends Component {
 
 class App extends Component {
 
+  todoList = null;
+
   constructor(props) {
     super(props);
-    this.state = {todoList: <TodoList />};
+    this.todoList = React.createRef();
     this.newTodoItem = this.newTodoItem.bind(this);
   }
 
   newTodoItem(value) {
-    alert('alert: ' + value);
-    this.state.todoList.addTodoItem(value);
+    /*alert('alert: ' + value);*/
+    var newTodo = {
+      task: value
+    }
+    this.todoList.current.addTodoItem(newTodo);
   }
 
   render() {
     return (
       <div id="App">
-        {this.state.todoList}
+        <TodoList ref={this.todoList} />
         <AddTodo handleSubmit={this.newTodoItem}/>
       </div>
     );
