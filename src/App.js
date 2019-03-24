@@ -27,11 +27,11 @@ class TodoList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {itemList: this.props.itemList};
+    this.state = {itemList: []};
   }
 
   addTodoItem = (todo) => {
-    this.state.itemList.push(todo);
+    this.setState({itemList: [...this.state.itemList, todo]});
   }
 
   render() {
